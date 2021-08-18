@@ -1,0 +1,16 @@
+function mostUsedWords(text) {
+  const wordArray = text.split(" ");
+  const uniqueArray = [];
+  if (text.trim().length === 0) {
+    return 0;
+  }
+  wordArray.forEach(function (element) {
+    if (!uniqueArray.includes(element)) {
+      uniqueArray.push(element);
+    }
+  });
+  uniqueArray.sort((a, b) => {
+    return numberOfOccurrencesInText(b, text) - numberOfOccurrencesInText(a, text)
+  });
+  return uniqueArray.slice(0, 3);
+}
