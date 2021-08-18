@@ -1,0 +1,123 @@
+#*********************************
+#  MODULE : translateWord
+#  INPUTS : line
+#  OUTPUTS: newLine
+#  DEF: This module takes each word to be translated, and translates them
+#*********************************
+
+def translateWord(line):
+    
+    # List creation
+    vowel = []
+    vowel = ["a", "e", "i", "o", "u", "y", "A", "E", "I", "O", "U", "Y"]
+    vowelExcept = []
+    vowelExcept = ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"]
+    newLine = []
+
+
+    # Feed words into the loop
+    words = (line.split())
+    for word in words:
+        word = str(word)
+
+    # Find the first letter of the word
+        count = 0
+        for char in range(len(word)-1):
+            if (not word[char].isalpha()):
+                count = count + 1
+                
+        firstLetter = count
+
+        # Check to see if the first letter is capitalized
+        upperCheck = word[firstLetter]
+        isCapital = False
+        
+        if (word[firstLetter] == upperCheck.upper()):
+            isCapital = True
+
+        # "Squish" word to lower case
+        word = word.lower()    
+
+
+        # Find the last letter
+        count = 0
+        for char in range(count, len(word)):
+            if (word[char].isalpha()):
+                count += 1
+            if ((not word[char].isalpha()) and (char != len(word)-1)):
+                count += 1
+
+            lastLetter = count - 1
+
+
+        # Find the first vowel in the word
+        count = 0
+        firstVowel = ""
+        while (firstVowel == ""):
+
+            # Find special cases
+            for char in range(len(word)):
+                if (word[char] not in vowel):
+                    count += 1
+
+                if ((word[char] in vowel) and firstVowel == ""):
+                    firstVowel = (count)
+
+                    if ((word[char] == "u" and word[char - 1] == "q")or word[0]
+                        == "y"):
+                        newEnd = "ay"
+                        firstVowel = count + 1
+
+
+            # Determine the ending of "ay" or "way"
+            if (word[firstLetter] in vowelExcept):
+                newEnd = "way"
+            else:
+                newEnd = "ay"
+
+        # Re-arranging the old word to the translated word
+        # If the word has a capital letter...
+        if isCapital == True:
+            firstLetterCap = word[firstVowel]
+            firstLetterCap = firstLetterCap.upper()
+            
+            newWord = (word[0:firstLetter] + firstLetterCap +\
+                       word[firstVowel + 1:lastLetter + 1] +\
+                       word[firstLetter : firstVowel] + newEnd +\
+                       word[lastLetter + 1:])
+        
+        # If the word has no capital letters...    
+        else:
+            newWord = word[0 : firstLetter] \
+                      + word[firstVowel : lastLetter + 1] \
+                      + word[firstLetter : firstVowel] + newEnd \
+                      + word[lastLetter + 1 :]
+
+        # Append words to a new list & return it
+        newLine.append(newWord)
+    
+    return newLine
+
+
+
+#*********************************
+#  MODULE : main
+#  DEF: The main algorithm, which translates the given text file into Pig Latin.
+#           The file is saved to "ilenamefay.txt" and printed to the screen.
+#*********************************
+
+def main():
+
+    # Variable declaration:
+    inputFile = None
+    
+    
+
+    # Main Algorithm:
+    saveFile = open("ilenamefay.txt", "w")
+    inputFile = getText()
+    translateFile(inputFile, saveFile)
+    inputFile.close()
+    saveFile.close()
+
+main()
